@@ -1,4 +1,4 @@
-// script.js
+// Quiz Data
 const quizData = [
     {
         question: "What does HTML stand for?",
@@ -8,8 +8,7 @@ const quizData = [
             "Hyper Transfer Markup Language",
             "Home Tool Markup Language"
         ],
-        correct: 0,
-        explanation: "HTML stands for HyperText Markup Language, which is the standard markup language for creating web pages."
+        correct: 0
     },
     {
         question: "Which CSS property is used to change the text color?",
@@ -19,8 +18,7 @@ const quizData = [
             "font-color",
             "text-style"
         ],
-        correct: 1,
-        explanation: "The 'color' property is used to specify the color of text in CSS."
+        correct: 1
     },
     {
         question: "Inside which HTML element do we put the JavaScript?",
@@ -30,124 +28,169 @@ const quizData = [
             "<scripting>",
             "<script>"
         ],
-        correct: 3,
-        explanation: "The <script> tag is used to embed JavaScript code in an HTML document."
+        correct: 3
     }
-    // Add more questions here
 ];
 
-// State Management
+// State
 let currentQuestion = 0;
 let score = 0;
-let timeLeft = 30;
-let timer = null;
-let answeredQuestions = new Array(quizData.length).fill(-1);
-let startTime = 0;
+let answers = [];
 
 // DOM Elements
 const screens = {
     start: document.getElementById('start-screen'),
     quiz: document.getElementById('quiz-screen'),
     result: document.getElementById('result-screen'),
-    highscores: document.getElementById('highscores-screen')
+    highScores: document.getElementById('high-scores-screen')
 };
 
-const elements = {
-    question: document.getElementById('question'),
-    options: document.getElementById('options'),
-    score: document.getElementById('score'),
-    timeLeft: document.getElementById('time'),
-    progressBar: document.getElementById('progress-bar'),
-    currentQuestion: document.getElementById('current-question'),
-    totalQuestions: document.getElementById('total-questions'),
-    finalScore: document.getElementById('final-score'),
-    timeTaken: document.getElementById('time-taken'),
-    correctAnswers: document.getElementById('correct-answers'),
-    highscoresList: document.getElementById('highscores-list')
-};
+// Initialize
+document.getElementById('total-questions').textContent = quizData.length;
+loadHighScores();
 
-const buttons = {
-    start: document.getElementById('start-btn'),
-    prev: document.getElementById('prev-btn'),
-    next: document.getElementById('next-btn'),
-    restart: document.getElementById('restart-btn'),
-    home: document.getElementById('home-btn'),
-    highscores: document.getElementById('highscore-btn'),
-    clearHighscores: document.getElementById('clear-highscores-btn'),
-    back: document.getElementById('back-btn')
-};
+// Event Listeners
+document.getElementById('start-btn').addEventListener('click', startQuiz);
+document.getElementById('show-scores-btn').addEventListener('click', showHighScores);
+document.getElementById('prev-btn').addEventListener('click', showPreviousQuestion);
+document.getElementById('next-btn').addEventListener('click', showNextQuestion);
+document.getElementById('restart-btn').addEventListener('click', startQuiz);
+document.getElementById('home-btn').addEventListener('click', showStartScreen);
+document.getElementById('clear-scores-btn').addEventListener('click', clearHighScores);
+document.getElementById('back-btn').addEventListener('click', showStartScreen);
 
-// Initialize Quiz
-function initializeQuiz() {
-    updateTotalQuestions();
-    attachEventListeners();
-    loadHighScores();
-}
-
-function updateTotalQuestions() {
-    elements.totalQuestions.textContent = quizData.length;
-}
-
-function attachEventListeners() {
-    buttons.start.addEventListener('click', startQuiz);
-    buttons.prev.addEventListener('click', prevQuestion);
-    buttons.next.addEventListener('click', nextQuestion);
-    buttons.restart.addEventListener('click', restartQuiz);
-    buttons.home.addEventListener('click', showStartScreen);
-    buttons.highscores.addEventListener('click', showHighScores);
-    buttons.clearHighscores.addEventListener('click', clearHighScores);
-    buttons.back.addEventListener('click', showStartScreen);
-}
-
-// Screen Management
+// Functions
 function showScreen(screenId) {
-    Object.values(screens).forEach(screen => {
-        screen.classList.add('hidden');
-    });
-    screens[screenId].classList.remove('hidden');
+    Object.values(screens).forEach(screen => screen.classList.remove('active'));
+    screens[screenId].classList.add('active');
 }
 
 function startQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    answers = new Array(quizData.length).fill(null);
     showScreen('quiz');
-    startTime = new Date().getTime();
-    resetQuiz();
-    startTimer();
     loadQuestion();
+    updateScore();
+}
+
+function loadQuestion() {
+    const question = quizData[currentQuestion];
+    document.getElementById('question').textContent = question.question;
+    document.getElementById('question-number').textContent = currentQuestion + 1;
+    
+    // Update progress
+    const progress = ((currentQuestion + 1) / quizData.length) * 100;
+    document.getElementById('progress').style.width = `${progress}%`;
+    
+    // Create options
+    const optionsContainer = document.getElementById('options');
+    optionsContainer.innerHTML = '';
+    
+    question.options.forEach((option, index) => {
+        const button = document.createElement('button');
+        button.className = 'option';
+        if (answers[currentQuestion] === index) {
+            button.classList.add('selected');
+        }
+        button.textContent = option;
+        button.addEventListener('click', () => selectAnswer(index));
+        optionsContainer.appendChild(button);
+    });
+
+    // Update navigation buttons
+    document.getElementById('prev-btn').disabled = currentQuestion === 0;
+    document.getElementById('next-btn').disabled = currentQuestion === quizData.length - 1;
+}
+
+function selectAnswer(selectedIndex) {
+    const options = document.querySelectorAll('.option');
+    options.forEach(option => option.classList.remove('selected'));
+    options[selectedIndex].classList.add('selected');
+    
+    answers[currentQuestion] = selectedIndex;
+    
+    if (selectedIndex === quizData[currentQuestion].correct) {
+        if (answers[currentQuestion] === null) {
+            score++;
+            updateScore();
+        }
+    }
+
+    // Show correct/wrong indication
+    options.forEach((option, index) => {
+        if (index === quizData[currentQuestion].correct) {
+            option.classList.add('correct');
+        } else if (index === selectedIndex) {
+            option.classList.add('wrong');
+        }
+    });
+
+    // Auto-advance to next question after a delay
+    if (currentQuestion < quizData.length - 1) {
+        setTimeout(showNextQuestion, 1000);
+    } else {
+        setTimeout(showResult, 1000);
+    }
+}
+
+function showPreviousQuestion() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        loadQuestion();
+    }
+}
+
+function showNextQuestion() {
+    if (currentQuestion < quizData.length - 1) {
+        currentQuestion++;
+        loadQuestion();
+    }
+}
+
+function updateScore() {
+    document.getElementById('score').textContent = score;
+}
+
+function showResult() {
+    document.getElementById('final-score').textContent = score;
+    document.getElementById('correct-answers').textContent = 
+        answers.filter((answer, index) => answer === quizData[index].correct).length;
+    showScreen('result');
+    saveScore(score);
 }
 
 function showStartScreen() {
     showScreen('start');
-    stopTimer();
 }
 
 function showHighScores() {
-    showScreen('highscores');
-    displayHighScores();
+    loadHighScores();
+    showScreen('highScores');
 }
 
-// Timer Functions
-function startTimer() {
-    timeLeft = 30;
-    timer = setInterval(() => {
-        timeLeft--;
-        elements.timeLeft.textContent = timeLeft;
-        
-        if (timeLeft <= 0) {
-            clearInterval(timer);
-            finishQuiz();
-        }
-    }, 1000);
+function saveScore(score) {
+    const scores = JSON.parse(localStorage.getItem('highScores') || '[]');
+    scores.push(score);
+    scores.sort((a, b) => b - a);
+    localStorage.setItem('highScores', JSON.stringify(scores.slice(0, 5)));
 }
 
-function stopTimer() {
-    clearInterval(timer);
+function loadHighScores() {
+    const highScoresElement = document.getElementById('high-scores');
+    const scores = JSON.parse(localStorage.getItem('highScores') || '[]');
+    
+    highScoresElement.innerHTML = scores.length ? 
+        scores.map((score, index) => `
+            <div class="score-item">
+                <span>#${index + 1}</span>
+                <span>${score} points</span>
+            </div>
+        `).join('') : 
+        '<p>No high scores yet!</p>';
 }
 
-function resetTimer() {
-    stopTimer();
-    timeLeft = 30;
-    elements.timeLeft.textContent = timeLeft;
+function clearHighScores() {
+    localStorage.removeItem('highScores');
+    loadHighScores();
 }
-
-// Quiz Logic
-function loadQuestion() {

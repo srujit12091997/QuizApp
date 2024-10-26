@@ -1,95 +1,66 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Advanced Quiz App</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Quiz App</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="quiz-container">
         <!-- Start Screen -->
-        <div id="start-screen" class="screen">
-            <h1>Welcome to Quiz App</h1>
-            <p>Test your knowledge!</p>
-            <button id="start-btn" class="control-btn">Start Quiz</button>
-            <button id="highscore-btn" class="control-btn secondary">High Scores</button>
+        <div id="start-screen" class="screen active">
+            <div class="quiz-header">
+                <h1>Quiz App</h1>
+                <p>Test your knowledge!</p>
+            </div>
+            <div class="controls">
+                <button id="start-btn" class="btn">Start Quiz</button>
+                <button id="show-scores-btn" class="btn secondary">High Scores</button>
+            </div>
         </div>
 
         <!-- Quiz Screen -->
-        <div id="quiz-screen" class="screen hidden">
-            <div class="quiz-header">
-                <div class="quiz-info">
-                    <span class="time">
-                        <i class="fas fa-clock"></i>
-                        Time: <span id="time">30</span>s
-                    </span>
-                    <span class="score">
-                        <i class="fas fa-star"></i>
-                        Score: <span id="score">0</span>
-                    </span>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progress-bar"></div>
-                </div>
-                <div class="question-count">
-                    Question <span id="current-question">1</span>/<span id="total-questions">0</span>
-                </div>
+        <div id="quiz-screen" class="screen">
+            <div class="quiz-info">
+                <span>Question <span id="question-number">1</span>/<span id="total-questions">5</span></span>
+                <span>Score: <span id="score">0</span></span>
             </div>
-
-            <div id="quiz-content">
-                <div class="quiz-question" id="question"></div>
-                <div class="quiz-options" id="options"></div>
-                <div class="quiz-controls">
-                    <button class="control-btn" id="prev-btn">
-                        <i class="fas fa-arrow-left"></i> Previous
-                    </button>
-                    <button class="control-btn" id="next-btn">
-                        Next <i class="fas fa-arrow-right"></i>
-                    </button>
-                </div>
+            <div class="progress-bar">
+                <div id="progress" class="progress"></div>
+            </div>
+            <div id="question" class="question"></div>
+            <div id="options" class="options"></div>
+            <div class="controls">
+                <button id="prev-btn" class="btn">Previous</button>
+                <button id="next-btn" class="btn">Next</button>
             </div>
         </div>
 
-        <!-- Result Screen -->
-        <div id="result-screen" class="screen hidden">
-            <h2>Quiz Completed!</h2>
-            <div class="result-details">
-                <div class="result-item">
-                    <i class="fas fa-star"></i>
-                    <p>Final Score: <span id="final-score">0</span></p>
+        <!-- Results Screen -->
+        <div id="result-screen" class="screen">
+            <div class="result">
+                <h2>Quiz Complete!</h2>
+                <div class="result-info">
+                    <p>Your score: <span id="final-score">0</span></p>
+                    <p>Correct answers: <span id="correct-answers">0</span></p>
                 </div>
-                <div class="result-item">
-                    <i class="fas fa-clock"></i>
-                    <p>Time Taken: <span id="time-taken">0</span>s</p>
+                <div class="controls">
+                    <button id="restart-btn" class="btn">Restart Quiz</button>
+                    <button id="home-btn" class="btn secondary">Home</button>
                 </div>
-                <div class="result-item">
-                    <i class="fas fa-check-circle"></i>
-                    <p>Correct Answers: <span id="correct-answers">0</span></p>
-                </div>
-            </div>
-            <div class="result-actions">
-                <button class="control-btn" id="restart-btn">
-                    <i class="fas fa-redo"></i> Restart Quiz
-                </button>
-                <button class="control-btn secondary" id="home-btn">
-                    <i class="fas fa-home"></i> Home
-                </button>
             </div>
         </div>
 
         <!-- High Scores Screen -->
-        <div id="highscores-screen" class="screen hidden">
+        <div id="high-scores-screen" class="screen">
             <h2>High Scores</h2>
-            <div id="highscores-list" class="highscores-list"></div>
-            <button class="control-btn" id="clear-highscores-btn">
-                <i class="fas fa-trash"></i> Clear Scores
-            </button>
-            <button class="control-btn secondary" id="back-btn">
-                <i class="fas fa-arrow-left"></i> Back
-            </button>
+            <div id="high-scores"></div>
+            <div class="controls">
+                <button id="clear-scores-btn" class="btn">Clear Scores</button>
+                <button id="back-btn" class="btn secondary">Back</button>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
