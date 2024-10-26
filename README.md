@@ -10,6 +10,11 @@ A simple interactive quiz application built with HTML, CSS, and vanilla JavaScri
 - Instant feedback on answers
 - Results summary
 - Restart functionality
+- High scores tracking
+- Progress bar
+- Multiple screens (Start, Quiz, Results, High Scores)
+- Animated transitions
+- Local storage for saving scores
 
 ## File Structure
 
@@ -26,7 +31,7 @@ quiz-app/
 
 1. Clone the repository or download the files
 ```bash
-git clone https://github.com/yourusername/quiz-app.git
+git clone https://github.com/srujit12091997/quiz-app.git
 ```
 
 2. Navigate to the project directory
@@ -38,12 +43,15 @@ cd quiz-app
 
 ## Usage
 
-1. The quiz starts automatically when you open the page
+1. Click "Start Quiz" on the welcome screen
 2. Select your answer from the multiple choice options
-3. Use the "Previous" and "Next" buttons to navigate between questions
-4. Your score updates automatically as you answer questions
-5. After completing all questions, you'll see your final score
-6. Click "Restart Quiz" to try again
+3. Receive instant feedback on your answer
+4. Use the "Previous" and "Next" buttons to navigate between questions
+5. Track your progress with the progress bar
+6. View your score updating in real-time
+7. See your final results and save your score
+8. View high scores from the main menu
+9. Clear high scores or restart the quiz
 
 ## Customizing Questions
 
@@ -68,25 +76,31 @@ const quizData = [
 ## Technical Details
 
 ### HTML Structure
-- Quiz container
+- Multiple screen containers
 - Question display area
 - Options buttons
 - Navigation controls
 - Score display
-- Results section
+- Progress bar
+- High scores section
 
 ### CSS Features
 - Responsive design
 - Interactive button states
 - Correct/incorrect answer highlighting
 - Clean and modern styling
+- Smooth animations
+- Progress bar visualization
 
 ### JavaScript Functionality
+- Screen management
 - Question loading and navigation
 - Answer validation
 - Score calculation
-- Quiz state management
-- Results display
+- Progress tracking
+- High score management
+- Local storage implementation
+- State management
 
 ## Browser Compatibility
 
@@ -100,12 +114,13 @@ The Quiz App is compatible with:
 
 Possible improvements that could be added:
 1. Timer functionality
-2. Progress bar
-3. Different question types
-4. Local storage for high scores
-5. Sound effects
-6. Animation effects
-7. Category selection
+2. Different question types
+3. Sound effects
+4. Category selection
+5. Difficulty levels
+6. User accounts
+7. Social sharing
+8. Question pool randomization
 
 ## Contributing
 
@@ -122,9 +137,9 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Author
 
-[Srujit varasala]
+[Srujit Varasala]
 - GitHub: [@srujit12091997](https://github.com/srujit12091997)
-- LinkedIn: [Srujit varasala](https://www.linkedin.com/in/srujitvarasala/)
+- LinkedIn: [Srujit Varasala](https://www.linkedin.com/in/srujitvarasala/)
 
 ## Acknowledgments
 
@@ -134,4 +149,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Support
 
-For support, email <srujit.v@gmail.com> or create an issue in this repository.
+For support, email srujit.v@gmail.com or create an issue in this repository.
